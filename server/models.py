@@ -12,15 +12,19 @@ class User(db.Model, SerializerMixin):
 
     @hybrid_property
     def password_hash(self):
-        raise Exception('Password hashes may not be viewed.')
+        #raise Exception('Password hashes may not be viewed.')
+        return self._password_hash;
 
     @password_hash.setter
     def password_hash(self, password):
+        #print("attempting to set the password:");
         password_hash = bcrypt.generate_password_hash(
             password.encode('utf-8'))
         self._password_hash = password_hash.decode('utf-8')
+        #print("successfully set the password!");
 
     def authenticate(self, password):
+        #print("attempting to login!");
         return bcrypt.check_password_hash(
             self._password_hash, password.encode('utf-8'))
 
